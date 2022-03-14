@@ -1,5 +1,13 @@
 <?php
-$con = mysqli_connect('localhost', 'root', '', 'baza');
+require_once("../server.php");
+session_start();
+
+try {
+  $con = new PDO("mysql:host=$server;dbname=$basePath", $user, $password);
+  echo "Connecting to $server";
+} catch (PDOException $e) {
+  echo "Error connecting to $server: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -15,7 +23,7 @@ $con = mysqli_connect('localhost', 'root', '', 'baza');
 <body>
 
   <div id="container">
-    Rejestracja
+    <h3>Rejestracja</h3>
     <form action="" method="post">
       <input type="text" name="new_login" placeholder="login"><br>
       <input type="password" name="new_password" placeholder="hasło"><br>
@@ -34,11 +42,11 @@ $con = mysqli_connect('localhost', 'root', '', 'baza');
           echo "Hasła nie są takie same, spróbuj ponownie!";
         } 
         else {
-          $que = mysqli_query($con, "SELECT * FROM `users` WHERE `login` = '" . $_POST['new_login'] . "';");
-          if ($check = mysqli_fetch_array($que)) {
+          $que = $con->query("SELECT * FROM `users` WHERE `login` = '" . $_POST['new_login'] . "';");
+          if ($que->fetch()) {
             echo "<span style='color: red;'>już jest użytkownik o takim loginie!</span>";
           } else {
-            mysqli_query($con, "INSERT INTO `users` (`id`, `login`, `password`) VALUES (NULL, '" . $_POST['new_login'] . "', '" . hash('whirlpool', $_POST['new_password']) . "')");
+            $con->query("INSERT INTO `users` (`id`, `login`, `password`) VALUES (NULL, '" . $_POST['new_login'] . "', '" . hash('whirlpool', $_POST['new_password']) . "')");
             header("Location:index.php");
           }
         }
@@ -51,6 +59,3 @@ $con = mysqli_connect('localhost', 'root', '', 'baza');
 </body>
 
 </html>
-<?php
-mysqli_close($con);
-?>

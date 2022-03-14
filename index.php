@@ -1,7 +1,13 @@
 <?php
-$con = new PDO("mysql:host=$server;dbname=$basePath", $user, $password);
-echo "Connecting to $server";
+require_once("../server.php");
 session_start();
+
+try {
+  $con = new PDO("mysql:host=$server;dbname=$basePath", $user, $password);
+  echo "Connecting to $server";
+} catch (PDOException $e) {
+  echo "Error connecting to $server: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -16,7 +22,7 @@ session_start();
 
 <body>
   <div id="content">
-    
+
   </div>
 
   <form method="post">
@@ -33,8 +39,3 @@ session_start();
 </body>
 
 </html>
-<?php
-catch(PDOException $e){
-  echo "Error connecting to $server: ".$e->getMessage();
-}
-?>

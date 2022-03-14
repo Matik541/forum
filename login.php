@@ -1,6 +1,13 @@
 <?php
-$con = mysqli_connect('localhost', 'root', '', 'baza');
+require_once("../server.php");
 session_start();
+
+try {
+  $con = new PDO("mysql:host=$server;dbname=$basePath", $user, $password);
+  echo "Connecting to $server";
+} catch (PDOException $e) {
+  echo "Error connecting to $server: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -21,8 +28,8 @@ session_start();
     <input type="submit" value="Zaloguj">
     <?php
     if(!empty($_POST['login']) && !empty($_POST['password'])){
-      $que = mysqli_query($con, "SELECT * FROM `users` WHERE `login` = '".$_POST['login']."' AND `password` = '".hash('whirlpool', $_POST['password'])."';");
-      if(mysqli_fetch_array($que)){
+      $que = $con->query("SELECT * FROM `users` WHERE `login` = '".$_POST['login']."' AND `password` = '".hash('whirlpool', $_POST['password'])."';");
+      if($que->fetch()){
         $_SESSION['logged'] = $_POST['login'];
         header('Location:index.php');
       }
@@ -37,6 +44,3 @@ session_start();
   
 </body>
 </html>
-<?php
-mysqli_close($con);
-?>
