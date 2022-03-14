@@ -1,5 +1,5 @@
 <?php
-require_once("../server.php");
+require_once("./server.php");
 session_start();
 
 try {
@@ -24,11 +24,11 @@ try {
   Logowanie
   <form action="" method="post">
     <input type="text" name="login" placeholder="login"><br>
-    <input type="password" name="password" placeholder="hasło"><br>
+    <input type="password" name="password" class="password" placeholder="hasło"><br>
     <input type="submit" value="Zaloguj">
     <?php
     if(!empty($_POST['login']) && !empty($_POST['password'])){
-      $que = $con->query("SELECT * FROM `users` WHERE `login` = '".$_POST['login']."' AND `password` = '".hash('whirlpool', $_POST['password'])."';");
+      $que = $con->query("SELECT * FROM `users` WHERE (`nick` = '".$_POST['login']."' OR `nick` = '".$_POST['login']."') AND `password` = '".hash('whirlpool', $_POST['password'])."';");
       if($que->fetch()){
         $_SESSION['logged'] = $_POST['login'];
         header('Location:index.php');

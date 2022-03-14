@@ -1,5 +1,5 @@
 <?php
-require_once("../server.php");
+require_once("./server.php");
 session_start();
 
 try {
@@ -25,16 +25,14 @@ try {
 
   </div>
 
-  <form method="post">
-    <input type="hidden" name="logged" value="<?php echo $_SESSION['logged']; ?>">
-    <input type="submit" value="Wyloguj">
-    <?php
-    if (isset($_POST['logged'])) {
-      unset($_SESSION['logged']);
-      header('refresh:0');
+  <?php 
+    if(isset($_SESSION['logged'])){
+      include('./logout.php');
     }
-    ?>
-  </form>
+    else {
+      echo "<a class='login' href='./login.php'>Zaloguj</a>";
+    }
+  ?>
 
 </body>
 

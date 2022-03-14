@@ -1,5 +1,5 @@
 <?php
-require_once("../server.php");
+require_once("./server.php");
 session_start();
 
 try {
@@ -26,8 +26,8 @@ try {
     <h3>Rejestracja</h3>
     <form action="" method="post">
       <input type="text" name="new_login" placeholder="login"><br>
-      <input type="password" name="new_password" placeholder="hasło"><br>
-      <input type="password" name="check_password" placeholder="powtórz hasło"><br>
+      <input type="password" class="password" name="new_password" placeholder="hasło"><br>
+      <input type="password" class="password" name="check_password" placeholder="powtórz hasło"><br>
       <input type="submit" value="Stwórz konto">
       <hr>
       <?php

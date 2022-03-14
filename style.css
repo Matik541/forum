@@ -17,3 +17,9 @@ body, html {
   text-align: center;
   color: black;
 }
+input[type="text"]{
+  width: 20ch;
+}
+.password{
+  width: 18ch;
+}
