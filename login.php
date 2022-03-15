@@ -2,45 +2,59 @@
 require_once("./server.php");
 session_start();
 
-try {
-  $con = new PDO("mysql:host=$server;dbname=$basePath", $user, $password);
-  echo "Connecting to $server";
-} catch (PDOException $e) {
-  echo "Error connecting to $server: " . $e->getMessage();
-}
 ?>
 <!DOCTYPE html>
-<html lang="pl">
-  <head>
-    <meta charset="UTF-8">
-  <meta name="keywords" content="session, login, register">
-  <meta name="description" content="zarejestruj i zaloguj się na stronę!">
-  <title>Login/Register</title>
-  <link rel="stylesheet" href="style.css">
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="log-reg.css">
 </head>
+
 <body>
-  
   <div id="container">
-  Logowanie
-  <form action="" method="post">
-    <input type="text" name="login" placeholder="login"><br>
-    <input type="password" name="password" class="password" placeholder="hasło"><br>
-    <input type="submit" value="Zaloguj">
-    <?php
-    if(!empty($_POST['login']) && !empty($_POST['password'])){
-      $que = $con->query("SELECT * FROM `users` WHERE (`nick` = '".$_POST['login']."' OR `nick` = '".$_POST['login']."') AND `password` = '".hash('whirlpool', $_POST['password'])."';");
-      if($que->fetch()){
-        $_SESSION['logged'] = $_POST['login'];
-        header('Location:index.php');
-      }
-      else{
-        echo "<br><span style='color: red;'>błędny login lub hasło!</span>";
-      }
-    }
-    ?>
-  </form> 
-  <a href="register.php">Załuż konto</a>
+    <div class="login">
+      <div class="form">
+        <form class="login-form" method="post">
+          <input type="text" placeholder="Login" name="login" required />
+          <div id="icon">
+            <input type="password" placeholder="Password" name="password" id="password" required />
+            <a> <span id="visiblity-toggle" class="material-icons-outlined">visibility</span> </a>
+          </div>
+          <button type="submit">login</button>
+          <?php
+          if (!empty($_POST['login']) && !empty($_POST['password'])) {
+            $que = $con->query("SELECT * FROM `users` WHERE (`email` = '" . $_POST['login'] . "' OR `nick` = '" . $_POST['login'] . "') AND `password` = '" . hash('whirlpool', $_POST['password']) . "';");
+            if ($que->fetch()) {
+              $_SESSION['logged'] = $_POST['login'];
+              header('Location:index.php');
+            }
+          }
+          ?>
+          <script>
+            let pass = document.querySelector('#password')
+            let btn = document.querySelector('#icon a span')
+
+            btn.addEventListener('click', () => {
+              if (pass.type === "text") {
+                pass.type = "password";
+                btn.innerHTML = "visibility";
+              } else {
+                pass.type = "text";
+                btn.innerHTML = "visibility_off";
+
+              }
+            })
+          </script>
+        </form>
+        <hr>
+        <a href="./register.php">Sign up</a>
+        <!-- <a href="./forgot.php">Forgot password?</a> -->
+      </div>
+    </div>
   </div>
-  
+
 </body>
+
 </html>

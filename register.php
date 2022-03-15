@@ -1,61 +1,69 @@
 <?php
 require_once("./server.php");
 session_start();
-
-try {
-  $con = new PDO("mysql:host=$server;dbname=$basePath", $user, $password);
-  echo "Connecting to $server";
-} catch (PDOException $e) {
-  echo "Error connecting to $server: " . $e->getMessage();
-}
 ?>
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="keywords" content="session, login, register">
-  <meta name="description" content="zarejestruj i zaloguj się na stronę!">
-  <title>Login/Register</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Register</title>
+  <link rel="stylesheet" href="log-reg.css">
 </head>
 
 <body>
 
-  <div id="container">
-    <h3>Rejestracja</h3>
-    <form action="" method="post">
-      <input type="text" name="new_login" placeholder="login"><br>
-      <input type="password" class="password" name="new_password" placeholder="hasło"><br>
-      <input type="password" class="password" name="check_password" placeholder="powtórz hasło"><br>
-      <input type="submit" value="Stwórz konto">
-      <hr>
-      <?php
-      if (!empty($_POST['new_login']) && !empty($_POST['new_password'])) {
-        if(strlen($_POST['new_password']) < 8) {
-          echo "Hasło musi mieć długość przynajmniej 8 znaków";
-        }
-        else if(!preg_match('/\d/', $_POST['new_password'])) {
-          echo "Hasło nie zawiera żadnej cyfry!";
-        }
-        else if ($_POST['new_password'] != $_POST['check_password']) {
-          echo "Hasła nie są takie same, spróbuj ponownie!";
-        } 
-        else {
-          $que = $con->query("SELECT * FROM `users` WHERE `login` = '" . $_POST['new_login'] . "';");
-          if ($que->fetch()) {
-            echo "<span style='color: red;'>już jest użytkownik o takim loginie!</span>";
-          } else {
-            $con->query("INSERT INTO `users` (`id`, `login`, `password`) VALUES (NULL, '" . $_POST['new_login'] . "', '" . hash('whirlpool', $_POST['new_password']) . "')");
-            header("Location:index.php");
-          }
-        }
-      }
-      ?>
-    </form>
-    <a href="login.php">Wróć do logowania</a>
-  </div>
+  <div class="login">
+    <div class="form">
+      <form class="login-form" method="post" id="form">
+        <input type="text" placeholder="e-mail" name="mail" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title="Pattern: any@sitename.xxx" />
+        <input type="text" placeholder="nickname" name="nick" required />
+        <div id="icon">
+          <input type="password" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" placeholder="password" name="password" id="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" />
+          <a> <span id="visiblity-toggle" class="material-icons-outlined">visibility</span> </a>
+        </div>
 
+        <input type="password" placeholder="repeat password" name="check_password" required />
+        <button type="submit" id="btn">register</button>
+        <div id="err">
+          <?php
+          if (!empty($_POST)) {
+            $mail = $_POST['mail'];
+            $nick = $_POST['nick'];
+            $password = hash($hash, $_POST['password']);
+            $check = $_POST['check_password'];
+
+            $is_mail = $con->query("SELECT * FROM `users` WHERE `email` = '$mail'");
+            $is_nick = $con->query("SELECT * FROM `users` WHERE `nick` = '$nick'");
+            if ($is_mail->fetch()) echo "<hr>There is already a user with this email";
+            else if ($is_nick->fetch()) echo "<hr>There is already a user with this nickname";
+            else {
+              $con->query("INSERT INTO `users` (`id`, `email`, `password`, `nick`) VALUES (NULL, '$mail', '$password', '$nick');");
+              header("Location:index.php");
+            }
+          }
+          ?>
+        </div>
+        <script>
+          let pass = document.querySelector('#password')
+          let btn = document.querySelector('#icon a span')
+
+          btn.addEventListener('click', () => {
+            if (pass.type === "text") {
+              pass.type = "password";
+              btn.innerHTML = "visibility";
+            } else {
+              pass.type = "text";
+              btn.innerHTML = "visibility_off";
+
+            }
+          })
+        </script>
+      </form>
+      <hr>
+      <a href="./login.php">Sign in</a>
+    </div>
+  </div>
 </body>
 
 </html>
