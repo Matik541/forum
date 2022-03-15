@@ -8,7 +8,7 @@ session_start();
 <head>
   <meta charset="UTF-8">
   <title>Register</title>
-  <link rel="stylesheet" href="log-reg.css">
+  <link rel="stylesheet" href="main.css">
 </head>
 
 <body>

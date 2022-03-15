@@ -1,13 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa &display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
 
 * {
   box-sizing: border-box;
 }
 
-body {
+::placeholder{
+  color: black;
+}
+
+html, body {
   background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
   font-family: 'Comfortaa', cursive;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  border-radius: 10px;
+  min-width: 750px;
+  width: 50%;
+  margin: 0 auto;
+  padding: 45px;
+  text-align: center;
 }
 
 .login {
@@ -24,13 +40,12 @@ body {
   z-index: 1;
   background: #FFFFFF;
   border-radius: 10px;
-  max-width: 360px;
   margin: 0 auto;
   padding: 45px;
   text-align: center;
 }
 
-.form input {
+.form input, .form select {
   outline: 0;
   background: #f2f2f2;
   width: 100%;
@@ -42,7 +57,9 @@ body {
   font-size: 14px;
 }
 
-.form input:focus, .form input:hover {
+.form input:focus, .form input:hover,
+.form select:focus, .form select:hover,
+.form .select:focus *, .form .select:hover * {
   background: #dbdbdb;
 }
 
@@ -92,4 +109,18 @@ input[name="password"]{
   color: gray;
   cursor: pointer;
   user-select: none;
+}
+
+#err{
+  color: red;
+}
+.select {
+  margin: 0 0 15px;
+}
+.select select{
+  margin: 0;
+}
+.select input{
+  margin: 0;
+  border-radius: 0 0 5px 5px;
 }
