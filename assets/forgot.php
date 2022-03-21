@@ -16,11 +16,7 @@ session_start();
   <div class="login">
     <div class="form">
       <form class="login-form" method="post">
-        <input type="text" placeholder="Login" name="login" required title="Your email or nickname" />
-        <div id="icon">
-          <input type="password" placeholder="Password" name="password" id="password" required />
-          <a> <span id="visiblity-toggle" class="material-icons-outlined">visibility</span> </a>
-        </div>
+        <input type="text" placeholder="Login" name="code" autocomplete="on" required title="Your email or nickname" />
         <button type="submit">login</button>
         <div id="err">
           <?php
@@ -53,7 +49,7 @@ session_start();
       </form>
       <hr>
       <a href="./register.php">Sign up</a>
-      <!-- <a href="./forgot.php">Forgot password?</a> -->
+      <a href="./forgot.php">Forgot password?</a>
     </div>
   </div>
 

@@ -9,9 +9,15 @@
   color: black;
 }
 
-html, body {
+html {
   background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
   font-family: 'Comfortaa', cursive;
+}
+body{
+  min-width: 100vw;
+  min-height: 100vh;
+  padding: 15px;
+  margin: 0;
 }
 
 .content {
@@ -23,16 +29,32 @@ html, body {
   width: 50%;
   margin: 0 auto;
   padding: 45px;
-  text-align: center;
+}
+
+.background{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #00000088;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99998;
 }
 
 .login {
+  z-index: 99999;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 360px;
   padding: 0 0;
+}
+
+.wrap {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
 }
 
 .form {
@@ -86,11 +108,11 @@ html, body {
 input[name="password"]{
   width: calc(100% - 50px);
 }
-#icon {
+.icon {
   display: flex;
   justify-content: space-between;
 }
-#icon a{
+.icon a{
   outline: 0;
   background: #f2f2f2;
   width: 45px;
@@ -101,27 +123,15 @@ input[name="password"]{
   box-sizing: border-box;
   font-size: 14px;
 }
-#icon a:focus, #icon a:hover {
+.icon a:focus, #icon a:hover {
   background: #dbdbdb;
 }
-#icon a span{
+.icon a span{
   font-size: 23px;
-  color: gray;
   cursor: pointer;
   user-select: none;
 }
 
 #err{
   color: red;
-}
-
-.select {
-  margin: 0 0 15px;
-}
-.select select{
-  margin: 0;
-}
-.select input{
-  margin: 0;
-  border-radius: 0 0 5px 5px;
 }
