@@ -35,12 +35,12 @@
     </div>
     <?php
     if (!empty($_POST["title"]) && !empty($_POST["category"])) {
-      $id = 1 + ($con->query("SELECT `id` FROM `posts` ORDER BY `author` DESC LIMIT 1;"))->fetch()[0];
+      $id = 1 + ($con->query("SELECT `id` FROM `posts` ORDER BY `id` DESC LIMIT 1;"))->fetch()[0];
       $title = $_POST["title"];
       $category = $_POST["category"];
       $author = $_SESSION['logged'];
       $author = ($con->query("SELECT `id` FROM `users` WHERE `nick` = '$author' OR `email` = '$author'"))->fetch()[0];
-      $con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `root`) VALUES ('$id', '$title', '$author', '$category', current_timestamp(), NULL);");
+      $con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES ('$id', '$title', '$author', '$category', current_timestamp(), NULL);");
       $_POST = array();
       header("./index.php?post=$id");
     }

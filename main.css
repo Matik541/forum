@@ -14,8 +14,8 @@ html {
   font-family: 'Comfortaa', cursive;
 }
 body{
-  min-width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
   padding: 15px;
   margin: 0;
 }

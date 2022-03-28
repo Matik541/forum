@@ -14,6 +14,8 @@ session_start();
   <link rel="stylesheet" href="main.css">
 </head>
 
+
+
 <body>
   <div class="content">
     <?php 
