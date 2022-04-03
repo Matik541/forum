@@ -40,7 +40,8 @@
             if (!empty($_POST['login']) && !empty($_POST['password'])) {
               $que = $con->query("SELECT * FROM `users` WHERE (`email` = '" . $_POST['login'] . "' OR `nick` = '" . $_POST['login'] . "') AND `password` = '" . hash($hash, $_POST['password']) . "';");
               if ($que->fetch()) {
-                $_SESSION['logged'] = $_POST['login'];
+                $login = $_POST['login'];
+                $_SESSION['logged'] = ($con->query("SELECT `id` FROM `users` WHERE `nick` = '$login' OR `email` = '$login'"))->fetch()[0];
                 header('Refresh:0');
               } else {
                 echo "<hr>Wrong login or password!";
@@ -78,7 +79,7 @@
           <button type="submit" id="btn">register</button>
           <div id="err">
             <?php
-            if (!empty($_POST)) {
+            if (!empty($_POST['mail']) && !empty($_POST['nick']) && !empty($_POST['password'])) {
               $mail = $_POST['mail'];
               $nick = $_POST['nick'];
               $password = hash($hash, $_POST['password']);

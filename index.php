@@ -1,7 +1,7 @@
 <?php
 require_once("./server.php");
 session_start();
-
+ob_start();
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -10,7 +10,15 @@ session_start();
   <meta charset="UTF-8">
   <meta name="keywords" content="">
   <meta name="description" content="">
-  <title>Forum</title>
+  <title>
+    <?php
+    echo $forumName;
+    if (!isset($_GET['category']) && isset($_GET['post']))
+      echo " - " . (($con->query("SELECT `title` FROM `posts` WHERE `posts`.`id` = '" . $_GET['post'] . "';"))->fetch()[0]);
+    if (isset($_GET['category']) && !isset($_GET['post']))
+      echo " : " . $_GET['category'];
+    ?>
+  </title>
   <link rel="stylesheet" href="main.css">
 </head>
 
@@ -18,22 +26,20 @@ session_start();
 
 <body>
   <div class="content">
-    <?php 
+    <?php
+    include("./assets/header.php");
+    if (isset($_GET['post']) || isset($_GET['category'])) {
       include("./assets/post.php");
-      if(isset($_SESSION['logged'])){
+    } else {
+      include("./assets/home.php");
+      if (isset($_SESSION['logged'])) {
+        echo "<hr>";
         include("./assets/create.php");
       }
+    }
+
     ?>
   </div>
-
-  <?php
-  if (isset($_SESSION['logged'])) {
-    include('./assets/logout.php');
-  }
-  else {
-    include('./assets/log-reg.php');
-  }
-  ?>
 
 </body>
 

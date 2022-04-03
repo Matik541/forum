@@ -5,12 +5,19 @@
   box-sizing: border-box;
 }
 
+:root{
+  --color1: #4b6cb7;
+  --color2: #395591;
+  --color3: #223458;
+  --color4: #182848;
+}
+
 ::placeholder{
   color: black;
 }
 
 html {
-  background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+  background: linear-gradient(90deg, var(--color1) 0%, var(--color4) 100%);
   font-family: 'Comfortaa', cursive;
 }
 body{
@@ -19,7 +26,26 @@ body{
   padding: 15px;
   margin: 0;
 }
-
+header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header menu {
+  display: flex;
+  gap: 2ch;
+}
+header menu > a, header menu > form > button{
+  color: black;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  font-family: 'Comfortaa', cursive;
+  font-size: 1em;
+  text-transform: capitalize;
+  padding: 0;
+  margin: 0;
+}
 .content {
   position: relative;
   z-index: 1;
@@ -28,7 +54,14 @@ body{
   min-width: 750px;
   width: 50%;
   margin: 0 auto;
-  padding: 45px;
+  padding: 15px 45px;
+}
+
+.comments {
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
+  flex-wrap: nowrap;
 }
 
 .background{
@@ -38,12 +71,12 @@ body{
   background-color: #00000088;
   width: 100vw;
   height: 100vh;
-  z-index: 99998;
+  z-index: 99998; 
 }
 
 .login {
   z-index: 99999;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -88,7 +121,7 @@ body{
 .form button {
   text-transform: uppercase;
   outline: 0;
-  background: #4b6cb7;
+  background: var(--color1);
   width: 100%;
   border: 0;
   border-radius: 5px;
@@ -100,10 +133,10 @@ body{
   cursor: pointer;
 }
 .form button:active {
-  background: #223458;
+  background: var(--color3);
 }
 .form button:hover, .form button:focus{
-  background: #395591;
+  background: var(--color2);
 }
 input[name="password"]{
   width: calc(100% - 50px);
@@ -130,6 +163,49 @@ input[name="password"]{
   font-size: 23px;
   cursor: pointer;
   user-select: none;
+}
+.like {
+  float: right;
+  display: flex;
+  align-items: center;
+}
+.like > button, .post button{
+  color: var(--color4);
+  background: none;
+  border: none;
+}
+.like > button:focus, 
+.like > button:hover{
+  color: var(--color2)
+}
+.like > button.liked, 
+.like > button.liked{
+  color: var(--color1)
+}
+.post-content{
+  float: left;
+  display: flex; 
+  align-items: center;
+}
+.post{
+  font-size: 1.25em; 
+  font-weight: bold;
+}
+
+.trash{
+  display: none;
+  color: var(--color4);
+}
+.post:hover .trash{
+  display: flex;
+}
+.trash:hover{
+  color: var(--color2);
+}
+
+.form form .group {
+  display: flex;
+  gap: 1ch;
 }
 
 #err{
