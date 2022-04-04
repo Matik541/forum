@@ -9,6 +9,11 @@
     }
     ?>
   </form>
+  |
+  <!-- Zrobić jako link do konta użytkownika :DDD -->
+  <div title="logged as"> 
+    <?= ($con->query("SELECT `nick` FROM `users` WHERE `id` = ".$_SESSION['logged']))->fetch()[0] ?>
+  </div>
 <?php endif;
 
 if(!isset($_SESSION['logged'])) :?>

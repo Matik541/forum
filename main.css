@@ -3,6 +3,7 @@
 
 * {
   box-sizing: border-box;
+  clear: both;
 }
 
 :root{
@@ -187,7 +188,7 @@ input[name="password"]{
   display: flex; 
   align-items: center;
 }
-.post{
+.post:not(h2){
   font-size: 1.25em; 
   font-weight: bold;
 }
@@ -206,6 +207,11 @@ input[name="password"]{
 .form form .group {
   display: flex;
   gap: 1ch;
+}
+
+.post-title {
+  display: flex;
+  justify-content: space-between;
 }
 
 #err{
