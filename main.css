@@ -194,11 +194,11 @@ input[name="password"]{
 }
 
 .trash{
-  display: none;
+  opacity: 0;
   color: var(--color4);
 }
 .post:hover .trash{
-  display: flex;
+  opacity: 1;
 }
 .trash:hover{
   color: var(--color2);

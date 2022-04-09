@@ -1,4 +1,13 @@
 <?php
+if (!empty($_POST['like'])) {
+	$post = $_POST['like'];
+	$user = $_SESSION['logged'];
+	$query_like = $con->query("SELECT * FROM `likes` WHERE `user_id` = '$user' AND `post_id` = '$post'");
+	if (!($query_like)->fetch())
+		$con->query("INSERT INTO `likes` (`id`, `user_id`, `post_id`) VALUES (NULL, '$user', '$post');");
+	else
+		$con->query("DELETE FROM `likes` WHERE `user_id` = '$user' AND `post_id` = '$post'");
+}
 
 if (!empty($_POST['delete'])) {
 	$post = $_POST['delete'];
@@ -33,17 +42,7 @@ if (!empty($_POST['confirm'])) {
 <div class="comments">
 	<h2>Most popular posts:</h2>
 	<?php
-	if (!empty($_POST['like'])) {
-		$post = $_POST['like'];
-		$user = $_SESSION['logged'];
-		$query_like = $con->query("SELECT * FROM `likes` WHERE `user_id` = '$user' AND `post_id` = '$post'");
-		if (!($query_like)->fetch()) {
-			$con->query("INSERT INTO `likes` (`id`, `user_id`, `post_id`) VALUES (NULL, '$user', '$post');");
-		} else {
-			$con->query("DELETE FROM `likes` WHERE `user_id` = '$user' AND `post_id` = '$post'");
-		}
-	}
-	$que = "SELECT `nick`, `date`, `posts`.`id`, `title`, `rot`, `users`.`id` FROM `likes` JOIN `posts` ON `post_id` = `posts`.`id` JOIN `users` ON `user_id` = `users`.`id` GROUP BY `post_id` ORDER BY COUNT(`likes`.`id`) DESC LIMIT 10;";
+	$que = "SELECT DISTINCT `nick`, `date`, `posts`.`id`, `title`, `rot`, `users`.`id` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id` GROUP BY `posts`.`id` ORDER BY COUNT(`likes`.`id`) DESC LIMIT 10;";
 	$que = $con->query($que);
 	if ($row = $que->fetchAll()) {
 		foreach ($row as $record) {

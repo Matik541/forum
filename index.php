@@ -2,14 +2,16 @@
 require_once("./server.php");
 session_start();
 ob_start();
+
+$request = explode('/', substr($_SERVER['REQUEST_URI'], 17));
+
 ?>
 <!DOCTYPE html>
 <html lang="pl">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="keywords" content="">
-  <meta name="description" content="">
+  <meta name="description" content='<?= $forumDescription ?>'>
   <title>
     <?php
     echo $forumName;
@@ -19,7 +21,7 @@ ob_start();
       echo " : " . $_GET['category'];
     ?>
   </title>
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="<?= $mainHref ?>main.css">
 </head>
 
 
@@ -30,7 +32,16 @@ ob_start();
     include("./assets/header.php");
     if (isset($_GET['post']) || isset($_GET['category'])) {
       include("./assets/post.php");
-    } else {
+    }
+    elseif (count($request) >= 2) {
+      if ($request[0] == 'profile')
+        include("./assets/profile.php");
+      else if($request[0] == 'post')
+        include("./assets/posts.php");
+      else
+        echo "404 - Not Found";
+    }
+    else {
       include("./assets/home.php");
       if (isset($_SESSION['logged'])) {
         echo "<hr>";
