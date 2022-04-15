@@ -1,7 +1,7 @@
 <?php
 $forumName = "\"taki drugi reddit\"";
 $forumDescription = "\"taki drugi reddit\", czytaj nie działa, ale jest :D";
-$mainHref = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'].'/forum/';
+$mainHref = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'].'/forum/index.php';
 
 $server = "localhost";
 $user = "root";

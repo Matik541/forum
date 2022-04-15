@@ -10,19 +10,14 @@
     ?>
   </form>
   |
-  <!-- Zrobić jako link do konta użytkownika :DDD -->
-  <div title="logged as"> 
-    <?= ($con->query("SELECT `nick` FROM `users` WHERE `id` = ".$_SESSION['logged']))->fetch()[0] ?>
-  </div>
+  <?php $profile = ($con->query("SELECT `nick` FROM `users` WHERE `id` = ".$_SESSION['logged']))->fetch()[0] ?>
+  <a class="profile" title="logged as" href="<?= $mainHref."/profile/".$profile?>"> 
+    <?= (strlen($profile) > 20)?(substr($profile, 0, 17)."..."):$profile ?>
+  </a>
 <?php endif;
 
 if(!isset($_SESSION['logged'])) :?>
   <form method="post" title="login">
-    <button type="submit" name="login">login</button>
-    <?php
-    if (isset($_POST['login'])) {
-      include('./assets/log-reg.php');
-    }
-    ?>
+    <button type="submit" name="log">login</button>
   </form>
 <?php endif; ?>

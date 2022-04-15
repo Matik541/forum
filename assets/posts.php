@@ -1,4 +1,8 @@
 <?php
+$getcategory = ($request[0] == 'category') ? $request[1] : ((isset($_GET['category']))?$_GET['category']:NULL);
+$getpost = ($request[0] == 'post') ? base_convert($request[1], 36, 10) : ((isset($_GET['post']))?$_GET['post']:NULL);
+
+
 if (!empty($_POST['like'])) {
 	$post = $_POST['like'];
 	$user = $_SESSION['logged'];
@@ -40,25 +44,14 @@ if (!empty($_POST['confirm'])) {
 
 ?>
 
-<?php if (!empty($_GET['post']) && empty($_GET['category'])) {
-	$que = $con->query("SELECT `nick`, `date`, `category`, `title`, `posts`.`id`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`id` = " . $_GET['post']);
+<?php if (!empty($getpost) && empty($getcategory)) {
+	$que = $con->query("SELECT `nick`, `date`, `category`, `title`, `posts`.`id`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`id` = $getpost");
 	$rec = $que->fetch();
 	if (!$rec) {
 		header("Location:index.php");
 	}
-	if ($rec = ($con->query("SELECT `nick`, `date`, `category`, `title`, `posts`.`id`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`id` = " . $_GET['post']))->fetch()) : ?>
+	if ($rec = ($con->query("SELECT `nick`, `date`, `category`, `title`, `posts`.`id`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`id` = $getpost"))->fetch()) : ?>
 		<style>
-			.form.comment {
-				padding: 0;
-			}
-
-			.comment.group {
-				display: flex;
-				justify-content: space-between;
-				align-items: flex-start;
-				gap: 1ch;
-			}
-
 			.form.comment.group .select {
 				width: 50%;
 			}
@@ -68,7 +61,7 @@ if (!empty($_POST['confirm'])) {
 			}
 		</style>
 
-		<div><span title="author"><?= $rec[0] . "</span> - <span title='publication date'>" . $rec[1] ?><span> | <a title='category' href='./index.php?category=<?= $rec[2] ?>'><?= $rec[2] ?></a></div>
+		<div><span title="author"><?= $rec[0] . "</span> - <span title='publication date'>" . $rec[1] ?><span> | <a title='category' href='<?= $mainHref ?>/category/<?= $rec[2] ?>'><?= $rec[2] ?></a></div>
 		<h2 class="post-title post">
 			<div class="post-content"><?= $rec[3] ?>
 				<form method='post'>
@@ -102,15 +95,14 @@ if (!empty($_POST['confirm'])) {
 		<hr>
 		<div class="comments">
 			<?php
-			$que = "SELECT `nick`, `date`, `posts`.`id`, `title`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`rot` = " . $_GET['post'];
-			$que = $con->query($que);
+			$que = $con->query("SELECT `nick`, `date`, `posts`.`id`, `title`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`rot` = $getpost");
 			if ($row = $que->fetchAll()) {
 				foreach ($row as $record) {
 					echo "<div class='post'>
           <div style='font-size: 0.75em;'><span title='author'>$record[0]</span> - <span title='publication date'>$record[1]</span></div>
           <div class='post-title'>
 						<div class='post-content'>
-            	<a title='go to this post' href='./index.php?post=$record[2]' class='post'>$record[3]</a>
+            	<a title='go to this post' href='$mainHref/post/".base_convert($record[2], 10, 36)."' class='post'>$record[3]</a>
 							<form method='post'>
 							";
 					if (isset($_SESSION['logged'])) {
@@ -156,7 +148,7 @@ if (!empty($_POST['confirm'])) {
 					$id = 1 + ($con->query("SELECT `id` FROM `posts` ORDER BY `id` DESC LIMIT 1;"))->fetch()[0];
 					$title = $_POST["title"];
 					$author = $_SESSION['logged'];
-					$con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES ('$id', '$title', '$author', '$rec[2]', current_timestamp(), " . $_GET['post'] . ");");
+					$con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES ('$id', '$title', '$author', '$rec[2]', current_timestamp(), $getpost);");
 					$_POST = array();
 					header("Refresh:0");
 				}
@@ -168,38 +160,16 @@ if (!empty($_POST['confirm'])) {
 }
 ?>
 
-<?php  ?>
+<?php if (!empty($getcategory) && empty($getpost)) : ?>
 	<style>
-		.comments {
-			display: flex;
-			gap: 1em;
-			flex-direction: column;
-			flex-wrap: nowrap;
-		}
+		
 
-		.form.comment {
-			padding: 0;
-		}
-
-		.comment.group {
-			display: flex;
-			justify-content: space-between;
-			align-items: flex-start;
-			gap: 5px;
-		}
-
-		.form.comment.group .select {
-			width: 50%;
-		}
-
-		.form.comment.group button {
-			width: 50%;
-		}
+		
 	</style>
-	<h3>Posts form category: <a href="./index.php?category=<?= $_GET['category'] ?>"><?= $_GET['category'] ?></a></h3>
+	<h3>Posts form category: <a href="<?= $mainHref ?>/category/<?= $getcategory ?>"><?= $getcategory ?></a></h3>
 	<div class="comments">
 		<?php
-		$query = "SELECT `nick`, `date`, `posts`.`id`, `title`, `rot`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`category` = '" . $_GET['category'] . "';";
+		$query = "SELECT `nick`, `date`, `posts`.`id`, `title`, `rot`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`category` = '" . $getcategory . "';";
 		$query = $con->query($query);
 		if ($row = $query->fetchAll()) {
 			foreach ($row as $record) {
@@ -207,7 +177,7 @@ if (!empty($_POST['confirm'])) {
             <div style='font-size: 0.75em;'><span title='author'>$record[0]</span> - <span title='publication date'>$record[1]</span></div>
             <div class='post-title'>
 							<div class='post-content'>
-								<a title='go to this post' href='./index.php?post=$record[2]' class='post'>$record[3]</a>
+								<a title='go to this post' href='$mainHref/post/".base_convert($record[2], 10, 36)."' class='post'>$record[3]</a>
 								<form method='post'>
 							";
 				if (isset($_SESSION['logged'])) {
@@ -252,7 +222,7 @@ if (!empty($_POST['confirm'])) {
 				$id = 1 + ($con->query("SELECT `id` FROM `posts` ORDER BY `id` DESC LIMIT 1;"))->fetch()[0];
 				$title = $_POST["title"];
 				$author = $_SESSION['logged'];
-				$con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES ('$id', '$title', '$author', '" . $_GET['category'] . "', current_timestamp(), NULL);");
+				$con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES ('$id', '$title', '$author', '" . $getcategory . "', current_timestamp(), NULL);");
 				$_POST = array();
 				header("Refresh:0");
 			}

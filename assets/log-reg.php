@@ -25,6 +25,7 @@
     <div class="wraper">
       <div class="option" id="login">
         <form class="login-form" method="post">
+          <input type="hidden" name="log">
           <input type="text" placeholder="Login" name="login" required title="Your email or nickname" /><br>
           <div class="icon" id="icon-login">
             <input type="password" placeholder="Password" name="password" id="password-login" required />
@@ -69,6 +70,7 @@
 
       <div class="option" id="register">
         <form class="login-form" method="post">
+          <input type="hidden" name="reg">
           <input type="text" placeholder="e-mail" name="mail" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" title="Pattern: any@sitename.xxx" /><br>
           <input autocomplete="off" type="text" placeholder="nickname" name="nick" required />
           <div class="icon" id="icon-register">
@@ -89,7 +91,7 @@
               if ($is_mail->fetch()) echo "<hr>There is already a user with this email";
               else if ($is_nick->fetch()) echo "<hr>There is already a user with this nickname";
               else {
-                $con->query("INSERT INTO `users` (`id`, `email`, `password`, `nick`) VALUES (NULL, '$mail', '$password', '$nick');");
+                $con->query("INSERT INTO `users` (`id`, `email`, `password`, `nick`, `picture`) VALUES (NULL, '$mail', '$password', '$nick', NULL);");
                 header("Refresh:0");
               }
             }

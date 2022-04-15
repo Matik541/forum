@@ -6,14 +6,14 @@
   clear: both;
 }
 
-:root{
+:root {
   --color1: #4b6cb7;
   --color2: #395591;
   --color3: #223458;
   --color4: #182848;
 }
 
-::placeholder{
+::placeholder {
   color: black;
 }
 
@@ -21,22 +21,28 @@ html {
   background: linear-gradient(90deg, var(--color1) 0%, var(--color4) 100%);
   font-family: 'Comfortaa', cursive;
 }
-body{
+
+body {
   width: 100%;
   height: 100vh;
   padding: 15px;
   margin: 0;
 }
-header{
+
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-header menu {
+
+header>div {
   display: flex;
-  gap: 2ch;
+  align-items: center;
+  gap: 0.5ch;
 }
-header menu > a, header menu > form > button{
+
+header>div>a,
+header>div>form>button {
   color: black;
   background: none;
   border: none;
@@ -47,6 +53,7 @@ header menu > a, header menu > form > button{
   padding: 0;
   margin: 0;
 }
+
 .content {
   position: relative;
   z-index: 1;
@@ -65,14 +72,14 @@ header menu > a, header menu > form > button{
   flex-wrap: nowrap;
 }
 
-.background{
+.background {
   position: fixed;
   top: 0;
   left: 0;
   background-color: #00000088;
   width: 100vw;
   height: 100vh;
-  z-index: 99998; 
+  z-index: 99998;
 }
 
 .login {
@@ -101,7 +108,8 @@ header menu > a, header menu > form > button{
   text-align: center;
 }
 
-.form input, .form select {
+.form input,
+.form select {
   outline: 0;
   background: #f2f2f2;
   width: 100%;
@@ -113,9 +121,12 @@ header menu > a, header menu > form > button{
   font-size: 14px;
 }
 
-.form input:focus, .form input:hover,
-.form select:focus, .form select:hover,
-.form .select:focus *, .form .select:hover * {
+.form input:focus,
+.form input:hover,
+.form select:focus,
+.form select:hover,
+.form .select:focus *,
+.form .select:hover * {
   background: #dbdbdb;
 }
 
@@ -133,20 +144,26 @@ header menu > a, header menu > form > button{
   transition: all 0.3 ease;
   cursor: pointer;
 }
+
 .form button:active {
   background: var(--color3);
 }
-.form button:hover, .form button:focus{
+
+.form button:hover,
+.form button:focus {
   background: var(--color2);
 }
-input[name="password"]{
+
+input[name="password"] {
   width: calc(100% - 50px);
 }
+
 .icon {
   display: flex;
   justify-content: space-between;
 }
-.icon a{
+
+.icon a {
   outline: 0;
   background: #f2f2f2;
   width: 45px;
@@ -157,50 +174,62 @@ input[name="password"]{
   box-sizing: border-box;
   font-size: 14px;
 }
-.icon a:focus, #icon a:hover {
+
+.icon a:focus,
+#icon a:hover {
   background: #dbdbdb;
 }
-.icon a span{
+
+.icon a span {
   font-size: 23px;
   cursor: pointer;
   user-select: none;
 }
+
 .like {
   float: right;
   display: flex;
   align-items: center;
 }
-.like > button, .post button{
+
+.like>button,
+.post button {
   color: var(--color4);
   background: none;
   border: none;
 }
-.like > button:focus, 
-.like > button:hover{
+
+.like>button:focus,
+.like>button:hover {
   color: var(--color2)
 }
-.like > button.liked, 
-.like > button.liked{
+
+.like>button.liked,
+.like>button.liked {
   color: var(--color1)
 }
-.post-content{
+
+.post-content {
   float: left;
-  display: flex; 
+  display: flex;
   align-items: center;
 }
-.post:not(h2){
-  font-size: 1.25em; 
+
+.post:not(h2) {
+  font-size: 1.25em;
   font-weight: bold;
 }
 
-.trash{
+.trash {
   opacity: 0;
   color: var(--color4);
 }
-.post:hover .trash{
+
+.post:hover .trash {
   opacity: 1;
 }
-.trash:hover{
+
+.trash:hover {
   color: var(--color2);
 }
 
@@ -214,6 +243,103 @@ input[name="password"]{
   justify-content: space-between;
 }
 
-#err{
+.profile {
+  max-width: 20ch;
+}
+
+.search {
+  display: flex;
+  padding: 0;
+}
+
+.search button {
+  width: 2em;
+  height: 2em;
+  padding: 2px;
+}
+
+.search input {
+  height: 2em;
+  width: 0;
+  padding: 0;
+  margin: 0;
+  transition: all 0.5s;
+}
+
+.search:hover input,
+.search input:focus {
+  width: 8em;
+  padding: 2px 1ch;
+  transition: all 0.5s;
+  margin-right: 0.5ch;
+}
+
+.form.comment.group .select {
+  width: 50%;
+}
+
+.form.comment.group button {
+  width: 50%;
+}
+
+.comments {
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+.comment.group {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1ch;
+}
+
+.form.comment {
+  padding: 0;
+}
+
+.form.create {
+  padding: 0;
+}
+
+.form.create {
+  padding: 0;
+}
+
+.create .group {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1ch;
+}
+
+.form.create .group .select {
+  width: 50%;
+}
+
+.form.create .group button {
+  width: 50%;
+}
+
+#err {
   color: red;
+}
+#profile {
+  display: flex;
+  gap: 5ch;
+}
+#profile img[src] {
+  background-color: black;
+}
+#profile img {
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+}
+#profile div {
+  display: flex;
+  flex-direction: column;
+  max-width: 20ch;
 }
