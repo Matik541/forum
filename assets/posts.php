@@ -1,6 +1,6 @@
 <?php
-$getcategory = ($request[0] == 'category') ? $request[1] : ((isset($_GET['category']))?$_GET['category']:NULL);
-$getpost = ($request[0] == 'post') ? base_convert($request[1], 36, 10) : ((isset($_GET['post']))?$_GET['post']:NULL);
+$getcategory = ($request[0] == 'category') ? $request[1] : ((isset($_GET['category'])) ? $_GET['category'] : NULL);
+$getpost = ($request[0] == 'post') ? base_convert($request[1], 36, 10) : ((isset($_GET['post'])) ? $_GET['post'] : NULL);
 
 
 if (!empty($_POST['like'])) {
@@ -61,7 +61,7 @@ if (!empty($_POST['confirm'])) {
 			}
 		</style>
 
-		<div><span title="author"><?= $rec[0] . "</span> - <span title='publication date'>" . $rec[1] ?><span> | <a title='category' href='<?= $mainHref ?>/category/<?= $rec[2] ?>'><?= $rec[2] ?></a></div>
+		<div><a title="author" href="<?= $mainHref . "/profile/" . str_replace(' ', '+', $rec[0]) ?>"><?= ((strlen($rec[0]) > 20) ? (substr($rec[0], 0, 17) . "...") : $rec[0]) . "</a> - <span title='publication date'>" . $rec[1] ?><span> | <a title='category' href='<?= $mainHref ?>/category/<?= $rec[2] ?>'><?= $rec[2] ?></a></div>
 		<h2 class="post-title post">
 			<div class="post-content"><?= $rec[3] ?>
 				<form method='post'>
@@ -69,10 +69,10 @@ if (!empty($_POST['confirm'])) {
 					if (isset($_SESSION['logged'])) {
 						if ($rec[5] == $_SESSION['logged']) {
 							echo "<button type='submit' name='delete' value='$rec[4]'>
-						<span title='delete post' class='trash material-icons-outlined'>
-							delete_forever
-						</span>
-					</button>";
+											<span title='delete post' class='trash material-icons-outlined'>
+												delete_forever
+											</span>
+										</button>";
 						}
 					}
 					?>
@@ -99,19 +99,19 @@ if (!empty($_POST['confirm'])) {
 			if ($row = $que->fetchAll()) {
 				foreach ($row as $record) {
 					echo "<div class='post'>
-          <div style='font-size: 0.75em;'><span title='author'>$record[0]</span> - <span title='publication date'>$record[1]</span></div>
+          <div style='font-size: 0.75em;'><a title='author' href='" . $mainHref . "/profile/" . str_replace(' ', '+', $profile) . "'>" . ((strlen($record[0]) > 20) ? (substr($record[0], 0, 17) . "...") : $record[0]) . "</a> - <span title='publication date'>$record[1]</span></div>
           <div class='post-title'>
 						<div class='post-content'>
-            	<a title='go to this post' href='$mainHref/post/".base_convert($record[2], 10, 36)."' class='post'>$record[3]</a>
+            	<a title='go to this post' href='$mainHref/post/" . base_convert($record[2], 10, 36) . "' class='post'>$record[3]</a>
 							<form method='post'>
 							";
 					if (isset($_SESSION['logged'])) {
 						if ($record[4] == $_SESSION['logged']) {
 							echo "<button type='submit' name='delete' value='$record[2]'>
-													<span title='delete post' class='trash material-icons-outlined'>
-														delete_forever
-													</span>
-												</button>";
+											<span title='delete post' class='trash material-icons-outlined'>
+												delete_forever
+											</span>
+										</button>";
 						}
 					}
 					echo "</form>
@@ -162,9 +162,9 @@ if (!empty($_POST['confirm'])) {
 
 <?php if (!empty($getcategory) && empty($getpost)) : ?>
 	<style>
-		
 
-		
+
+
 	</style>
 	<h3>Posts form category: <a href="<?= $mainHref ?>/category/<?= $getcategory ?>"><?= $getcategory ?></a></h3>
 	<div class="comments">
@@ -174,19 +174,19 @@ if (!empty($_POST['confirm'])) {
 		if ($row = $query->fetchAll()) {
 			foreach ($row as $record) {
 				echo "<div class='post'>
-            <div style='font-size: 0.75em;'><span title='author'>$record[0]</span> - <span title='publication date'>$record[1]</span></div>
+            <div style='font-size: 0.75em;'><a title='author' href=" . $mainHref . "/profile/" . str_replace(' ', '+', $record[0]) . ">" . ((strlen($record[0]) > 20) ? (substr($record[0], 0, 17) . "...") : $record[0]) . "</a> - <span title='publication date'>$record[1]</span></div>
             <div class='post-title'>
 							<div class='post-content'>
-								<a title='go to this post' href='$mainHref/post/".base_convert($record[2], 10, 36)."' class='post'>$record[3]</a>
+								<a title='go to this post' href='$mainHref/post/" . base_convert($record[2], 10, 36) . "' class='post'>$record[3]</a>
 								<form method='post'>
 							";
 				if (isset($_SESSION['logged'])) {
 					if ($record[5] == $_SESSION['logged']) {
 						echo "<button type='submit' name='delete' value='$record[2]'>
-													<span title='delete post' class='trash material-icons-outlined'>
-														delete_forever
-													</span>
-												</button>";
+										<span title='delete post' class='trash material-icons-outlined'>
+											delete_forever
+										</span>
+									</button>";
 					}
 				}
 				echo "</form>

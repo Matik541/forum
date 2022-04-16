@@ -11,7 +11,7 @@
   </form>
   |
   <?php $profile = ($con->query("SELECT `nick` FROM `users` WHERE `id` = ".$_SESSION['logged']))->fetch()[0] ?>
-  <a class="profile" title="logged as" href="<?= $mainHref."/profile/".$profile?>"> 
+  <a class="profile" title="logged as" href="<?= $mainHref."/profile/".str_replace(' ', '+', $profile)?>"> 
     <?= (strlen($profile) > 20)?(substr($profile, 0, 17)."..."):$profile ?>
   </a>
 <?php endif;

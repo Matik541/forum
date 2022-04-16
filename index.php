@@ -4,7 +4,8 @@ session_start();
 ob_start();
 
 $request = explode('/', substr($_SERVER['REQUEST_URI'], 17));
-$request[1] = urldecode($request[1]);
+if (count($request) == 2)
+  $request[1] = urldecode($request[1]);
 
 ?>
 <!DOCTYPE html>
@@ -31,21 +32,19 @@ $request[1] = urldecode($request[1]);
   <div class="content">
     <?php
     include("./assets/header.php");
-    if(isset($_POST['reg']) || isset($_POST['log'])){
+    if (isset($_POST['reg']) || isset($_POST['log'])) {
       include("./assets/log-reg.php");
     }
     if (isset($_GET['post']) || isset($_GET['category'])) {
       include("./assets/posts.php");
-    }
-    elseif (count($request) >= 2) {
+    } elseif (count($request) >= 2) {
       if ($request[0] == 'profile')
         include("./assets/profile.php");
-      else if($request[0] == 'post' || $request[0] == 'category')
+      else if ($request[0] == 'post' || $request[0] == 'category')
         include("./assets/posts.php");
       else
         echo "404 - Not Found";
-    }
-    else {
+    } else {
       include("./assets/home.php");
       if (isset($_SESSION['logged'])) {
         echo "<hr>";

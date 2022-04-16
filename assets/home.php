@@ -43,12 +43,12 @@ if (!empty($_POST['confirm'])) {
 	<h2>Most popular posts:</h2>
 	<?php
 	$que = "SELECT DISTINCT `nick`, `date`, `posts`.`id`, `title`, `rot`, `users`.`id`, `category` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id`";
-	if(!empty($_GET['search'])){
+	if (!empty($_GET['search'])) {
 		$search = explode(" ", trim($_GET['search']));
-		$que .= " WHERE `title` LIKE '%".$search[0]."%'";
+		$que .= " WHERE `title` LIKE '%" . $search[0] . "%'";
 		unset($search[0]);
-		foreach ($search as $word){
-			$que .= " OR `title` LIKE '%".$word."%'";
+		foreach ($search as $word) {
+			$que .= " OR `title` LIKE '%" . $word . "%'";
 		}
 	}
 	$que .= "GROUP BY `posts`.`id` ORDER BY COUNT(`likes`.`id`) DESC;";
@@ -56,10 +56,10 @@ if (!empty($_POST['confirm'])) {
 	if ($row = $que->fetchAll()) {
 		foreach ($row as $record) {
 			echo "<div class='post'>
-          <div style='font-size: 0.75em;'>$record[0] - $record[1]</div>
+          <div style='font-size: 0.75em;'><a title='author' href='".$mainHref."/profile/".str_replace(' ', '+', $record[0])."'>" . ((strlen($record[0]) > 20) ? (substr($record[0], 0, 17) . "...") : $record[0]) . "</a> - $record[1]</div>
           <div class='post-title'>
 						<div class='post-content'>
-            <a href='$mainHref/post/".base_convert($record[2], 10, 36)."' class='post'>$record[3]</a><form method='post'>
+            <a href='$mainHref/post/" . base_convert($record[2], 10, 36) . "' class='post'>$record[3]</a><form method='post'>
 						";
 			if (isset($_SESSION['logged'])) {
 				if ($record[5] == $_SESSION['logged']) {
