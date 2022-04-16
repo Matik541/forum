@@ -1,14 +1,15 @@
 <?php
-$forumName = "\"taki drugi reddit\"";
-$forumDescription = "\"taki drugi reddit\", czytaj nie działa, ale jest :D";
-$mainHref = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'].'/forum/index.php';
+$forumName = "name";
+$forumDescription = "description";
+$mainDir = "/yourDir";
+$mainHref = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME']."$mainDir/index.php";
 
 $server = "localhost";
 $user = "root";
 $password = "";
-$basePath = "forum";
+$basePath = "yourBase";
 
-$hash = "sha256";
+$hash = "chooseHashAlg";
 
 try {
   $con = new PDO("mysql:host=$server;dbname=$basePath", $user, $password);
