@@ -7,6 +7,18 @@ $request = explode('/', substr($_SERVER['REQUEST_URI'], 17));
 if (count($request) == 2)
   $request[1] = urldecode($request[1]);
 
+function publication($date)
+{
+  $date = time() - strtotime($date);
+  $time = $date % 60 . "s";
+  if ($date / 60 % 60 > 0)
+    $time = $date / 60 % 60 . "m";
+  if ($date / 60 / 60 % 24 > 0)
+    $time = $date / 60 / 60 % 24 . "h";
+  if (intval($date / 60 / 60 / 24) > 0)
+    $time = intval($date / 60 / 60 / 24) . "d";
+  return "$time ago";
+}
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -37,7 +49,7 @@ if (count($request) == 2)
     }
     if (isset($_GET['post']) || isset($_GET['category'])) {
       include("./assets/posts.php");
-    } elseif (count($request) >= 2) {
+    } else if (count($request) >= 2) {
       if ($request[0] == 'profile')
         include("./assets/profile.php");
       else if ($request[0] == 'post' || $request[0] == 'category')

@@ -4,14 +4,15 @@ in main dir add file `server.php` with this information:
 $forumName = "name";
 $forumDescription = "description";
 $mainDir = "/yourDir";
-$mainHref = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME']."$mainDir/index.php";
 
 $server = "host";
 $user = "";
 $password = "";
 $basePath = "yourBase";
 
-$hash = "HashAlg"; // eg. sha1
+$hash = "HashAlg"; // eg. sha256
+
+$mainHref = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME']."$mainDir/index.php";
 
 try {
   $con = new PDO("mysql:host=$server;dbname=$basePath", $user, $password);

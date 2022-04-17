@@ -7,6 +7,7 @@
 }
 
 :root {
+	--color0: #9fa2a7;
 	--color1: #4b6cb7;
 	--color2: #395591;
 	--color3: #223458;
@@ -51,6 +52,18 @@ header>div>form>button {
 	font-size: 1em;
 	text-transform: capitalize;
 	padding: 0;
+	margin: 0;
+}
+
+h3 a, a.post, a[title="category"]{
+	text-decoration: none;
+}
+a[title="author"]{
+	color: black;
+	text-decoration: dotted;
+}
+
+form{
 	margin: 0;
 }
 
@@ -140,17 +153,21 @@ header>div>form>button {
 	padding: 15px;
 	color: #FFFFFF;
 	font-size: 14px;
-	-webkit-transition: all 0.3 ease;
-	transition: all 0.3 ease;
+	-webkit-transition: all 0.3s ease;
+	transition: all 0.3s ease;
 	cursor: pointer;
 }
 
-.form button:active {
+.form button:disabled {
+	background: var(--color0);
+}
+
+.form button:active:not(:disabled) {
 	background: var(--color3);
 }
 
-.form button:hover,
-.form button:focus {
+.form button:hover:not(:disabled),
+.form button:focus:not(:disabled) {
 	background: var(--color2);
 }
 
@@ -241,6 +258,7 @@ input[name="password"] {
 .post-title {
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: 0;
 }
 
 .profile {
@@ -328,23 +346,21 @@ input[name="password"] {
 }
 #profile {
 	display: flex;
-	gap: 5ch;
-}
-#profile img[src] {
-	background-color: black;
+	justify-content: space-evenly;
 }
 #profile img {
+	background-color: black;
 	width: 200px;
 	height: 200px;
 	border-radius: 100%;
 }
-#profile div {
+#profile .info {
 	display: flex;
 	flex-direction: column;
-	max-width: 20ch;
+	width: 200px;
 }
 
-.hr_label {
+.hr-label {
 	background-color: white;
 	position: relative;
 	bottom: -1em;

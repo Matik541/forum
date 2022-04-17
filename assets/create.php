@@ -20,7 +20,7 @@
   if (!empty($_POST["title"]) && !empty($_POST["category"])) {
     $id = 1 + ($con->query("SELECT `id` FROM `posts` ORDER BY `id` DESC LIMIT 1;"))->fetch()[0];
     $title = trim($_POST["title"]);
-    $category = $_POST["category"];
+    $category = str_replace("+", "", $_POST["category"]);
     $author = $_SESSION['logged'];
     $con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES ('$id', '$title', '$author', '$category', current_timestamp(), NULL);");
     $_POST = array();

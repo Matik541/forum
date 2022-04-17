@@ -82,13 +82,15 @@
           <div id="err">
             <?php
             if (!empty($_POST['mail']) && !empty($_POST['nick']) && !empty($_POST['password'])) {
-              $mail = $_POST['mail'];
+              $mail = $_POST['mail'];              
               $nick = $_POST['nick'];
+              
               $password = hash($hash, $_POST['password']);
 
               $is_mail = $con->query("SELECT * FROM `users` WHERE `email` = '$mail'");
               $is_nick = $con->query("SELECT * FROM `users` WHERE `nick` = '$nick'");
-              if ($is_mail->fetch()) echo "<hr>There is already a user with this email";
+              if (!(strpos('+', $nick) != false)) echo "<hr>Nick can't contain \"+\" sign";
+              else if ($is_mail->fetch()) echo "<hr>There is already a user with this email";
               else if ($is_nick->fetch()) echo "<hr>There is already a user with this nickname";
               else {
                 $con->query("INSERT INTO `users` (`id`, `email`, `password`, `nick`, `picture`) VALUES (NULL, '$mail', '$password', '$nick', NULL);");
