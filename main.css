@@ -30,6 +30,23 @@ body {
 	margin: 0;
 }
 
+h3 a,
+a.post,
+a[title="category"],
+a[title="author"] {
+	text-decoration: none;
+}
+
+a:visited, header>div>form>button {
+	color: var(--color3)
+}
+a:active {
+	color: var(--color1)
+}
+a:link, a:hover, a:focus, header>div>form>button:focus, header>div>form>button:hover {
+	color: var(--color2)
+}
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -44,7 +61,6 @@ header>div {
 
 header>div>a,
 header>div>form>button {
-	color: black;
 	background: none;
 	border: none;
 	text-decoration: underline;
@@ -55,15 +71,7 @@ header>div>form>button {
 	margin: 0;
 }
 
-h3 a, a.post, a[title="category"]{
-	text-decoration: none;
-}
-a[title="author"]{
-	color: black;
-	text-decoration: dotted;
-}
-
-form{
+form {
 	margin: 0;
 }
 
@@ -79,6 +87,8 @@ form{
 }
 
 .comments {
+	margin: .5em;
+	font-size: 0.75em;
 	display: flex;
 	gap: 1em;
 	flex-direction: column;
@@ -236,6 +246,9 @@ input[name="password"] {
 	font-size: 1.25em;
 	font-weight: bold;
 }
+.post h2 {
+	margin: 0;
+}
 
 .trash {
 	opacity: 0;
@@ -344,19 +357,26 @@ input[name="password"] {
 #err {
 	color: red;
 }
+
 #profile {
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: space-between;
 }
+
 #profile img {
 	background-color: black;
 	width: 200px;
 	height: 200px;
 	border-radius: 100%;
 }
+
 #profile .info {
 	display: flex;
 	flex-direction: column;
+	width: 200px;
+}
+
+#profile .action {
 	width: 200px;
 }
 
@@ -365,5 +385,31 @@ input[name="password"] {
 	position: relative;
 	bottom: -1em;
 	left: 2ch;
-	padding: .5ch;
+	padding: 0 .5ch;
+}
+
+.scrolling-wrapper-flexbox {
+	padding: .5em;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+	gap: 5%;
+}
+.scrolling-wrapper-flexbox .card {
+	flex: 0 0 auto;
+}
+.scrolling-wrapper-flexbox .card a {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.scrolling-wrapper-flexbox .card a img {
+	border-radius: 100%;
+}
+.posts {
+	padding: .5em;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	gap: .5em;
 }

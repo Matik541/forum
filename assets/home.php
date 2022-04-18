@@ -4,7 +4,7 @@ if (!empty($_POST['like'])) {
 	$user = $_SESSION['logged'];
 	$query_like = $con->query("SELECT * FROM `likes` WHERE `user_id` = '$user' AND `post_id` = '$post'");
 	if (!($query_like)->fetch())
-		$con->query("INSERT INTO `likes` (`id`, `user_id`, `post_id`) VALUES (NULL, '$user', '$post');");
+		$con->query("INSERT INTO `likes` (`user_id`, `post_id`) VALUES ('$user', '$post');");
 	else
 		$con->query("DELETE FROM `likes` WHERE `user_id` = '$user' AND `post_id` = '$post'");
 }
@@ -39,10 +39,10 @@ if (!empty($_POST['confirm'])) {
 }
 ?>
 
-<div class="comments">
+<div class="comments" style="font-size: 1em;">
 	<h3>Most popular posts:</h3>
 	<?php
-	$que = "SELECT DISTINCT `nick`, `date`, `posts`.`id`, `title`, `rot`, `users`.`id`, `category` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id`";
+	$que = "SELECT DISTINCT `nick`, `date`, `posts`.`id` AS 'post', `title`, `rot`, `author`, `category` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id`";
 	if (!empty($_GET['search'])) {
 		$search = explode(" ", trim($_GET['search']));
 		$que .= " WHERE `title` LIKE '%" . $search[0] . "%'";
@@ -51,45 +51,11 @@ if (!empty($_POST['confirm'])) {
 			$que .= " OR `title` LIKE '%" . $word . "%'";
 		}
 	}
-	$que .= "GROUP BY `posts`.`id` ORDER BY COUNT(`likes`.`id`) DESC;";
+	$que .= "GROUP BY `posts`.`id` ORDER BY COUNT(`likes`.`post_id`) DESC, `date`;";
 	$que = $con->query($que);
 	if ($row = $que->fetchAll()) {
 		foreach ($row as $record) {
-			echo "<div class='post'>
-          <div style='font-size: 0.75em;'><a title='author' href='".$mainHref."/profile/".str_replace(' ', '+', $record[0])."'>" . ((strlen($record[0]) > 20) ? (substr($record[0], 0, 17) . "...") : $record[0]) . "</a> - <span title='publication date | $record[1]'>".publication($record[1])."</span> | <a title='category' href='$mainHref/category/".str_replace(' ', '+', $record[6])."'>$record[6]</a></div>
-          <div class='post-title'>
-						<div class='post-content'>
-            <a href='$mainHref/post/" . base_convert($record[2], 10, 36) . "' class='post'>$record[3]</a><form method='post'>
-						";
-			if (isset($_SESSION['logged'])) {
-				if ($record[5] == $_SESSION['logged']) {
-					echo "<button type='submit' name='delete' value='$record[2]'>
-									<span title='delete post' class='trash material-icons-outlined'>
-										delete_forever
-									</span>
-								</button>";
-				}
-			}
-			echo "</form>
-						</div>
-						<form method='post' class='like'>";
-			echo (($con->query("SELECT COUNT(*) FROM `likes` WHERE `post_id` = '" . $record[2] . "';"))->fetch()[0]);
-			if (!isset($_SESSION['logged'])) : ?>
-				<button type='submit' name="login">
-					<span class='material-icons-outlined'>favorite</span>
-				</button>
-			<?php endif;
-			if (isset($_SESSION['logged'])) : ?>
-				<input type='hidden' name='like' value='<?= $record[2] ?>'>
-				<button type='submit' <?= ((($con->query("SELECT * FROM `likes` WHERE `user_id` = '" . $_SESSION['logged'] . "' AND `post_id` = '" . $record[2] . "';"))->fetch()) ? "class='liked'" : "") ?>>
-					<span class='material-icons-outlined'>favorite</span>
-				</button>
-
-	<?php endif;
-
-			echo "</form>
-					</div>
-        </div>";
+			post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['nick'], $record['rot'], $con, $mainHref);
 		}
 	} else {
 		echo "No post yet!";
