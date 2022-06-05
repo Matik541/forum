@@ -43,29 +43,29 @@ SET time_zone = "+00:00";
 CREATE TABLE `friends` (
   `user_id_1` int(11) NOT NULL,
   `user_id_2` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `likes` (
   `user_id` int(11) NOT NULL,
   `post_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `posts` (
   `id` int(11) NOT NULL,
-  `title` text COLLATE utf8 NOT NULL,
+  `title` text NOT NULL,
   `author` int(11) NOT NULL,
-  `category` text COLLATE utf8 NOT NULL,
+  `category` text NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `rot` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `email` varchar(100) COLLATE utf8 NOT NULL,
-  `password` text COLLATE utf8 NOT NULL,
-  `nick` varchar(50) COLLATE utf8 NOT NULL,
-  `picture` text COLLATE utf8 DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8;
+  `email` varchar(100) NOT NULL,
+  `password` text NOT NULL,
+  `nick` varchar(50) NOT NULL,
+  `picture` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `friends`
   ADD PRIMARY KEY (`user_id_1`,`user_id_2`),
@@ -101,5 +101,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
 ```
