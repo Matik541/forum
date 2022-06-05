@@ -102,21 +102,21 @@ if ($fetch) : ?>
 	</div>
 	<span class="hr-label">Posts</span>
 	<hr>
-	<div class="posts">
+	<div class="posts" style="font-size: 0.75em;">
 		<?php
-		$que = $con->query("SELECT `nick`, `date`, `category`, `title`, `posts`.`id` AS 'post', `author`, `rot` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `author` = '$fetch[0]' LIMIT 3");
+		$que = $con->query("SELECT `nick`, `picture`, `date`, `category`, `title`, `posts`.`id` AS 'post', `author`, `rot` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `author` = '$fetch[0]' LIMIT 3");
 		while ($record = $que->fetch()) {
-			post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['nick'], $record['rot'], $con, $mainHref);
+			post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['picture'], $record['nick'], $record['rot'], $con, $mainHref);
 		}
 		?>
 	</div>
 	<span class="hr-label">Liked posts</span>
 	<hr>
-	<div class="posts">
+	<div class="posts" style="font-size: 0.75em;">
 	<?php
-		$que = $con->query("SELECT `nick`, `date`, `category`, `title`, `posts`.`id` AS 'post', `author`, `rot` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id` WHERE `likes`.`user_id` = $fetch[0] GROUP BY `posts`.`id` LIMIT 3;");
+		$que = $con->query("SELECT `nick`, `picture`, `date`, `category`, `title`, `posts`.`id` AS 'post', `author`, `rot` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id` WHERE `likes`.`user_id` = $fetch[0] GROUP BY `posts`.`id` LIMIT 3;");
 		while ($record = $que->fetch()) {
-			post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['nick'], $record['rot'], $con, $mainHref);
+			post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['picture'], $record['nick'], $record['rot'], $con, $mainHref);
 		}
 		?>
 	</div>

@@ -40,22 +40,25 @@ if (!empty($_POST['confirm'])) {
 ?>
 
 <div class="comments" style="font-size: 1em;">
-	<h3>Most popular posts:</h3>
+	<h3>Most popular posts<?= (!empty($_GET['search']))?" with \"".trim($_GET['search'])."\"":""?>:</h3>
 	<?php
-	$que = "SELECT DISTINCT `nick`, `date`, `posts`.`id` AS 'post', `title`, `rot`, `author`, `category` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id`";
-	if (!empty($_GET['search'])) {
+	if (!empty($_GET['search'])) {		
+		$que = "SELECT `pos`.* FROM (";
 		$search = explode(" ", trim($_GET['search']));
-		$que .= " WHERE `title` LIKE '%" . $search[0] . "%'";
+		$que .= "SELECT `nick`, `picture`, `date`, `posts`.`id` AS 'post', `title`, `rot`, `author`, `category`, COUNT(`likes`.`post_id`) AS 'likes' FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id` WHERE `title` LIKE '%$search[0]%' GROUP BY `likes`.`post_id`";
 		unset($search[0]);
 		foreach ($search as $word) {
-			$que .= " OR `title` LIKE '%" . $word . "%'";
+			$que .= "UNION ALL ".
+			"SELECT `nick`, `picture`, `date`, `posts`.`id` AS 'post', `title`, `rot`, `author`, `category`, COUNT(`likes`.`post_id`) AS 'likes' FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id` WHERE `title` LIKE '%$word%' GROUP BY `likes`.`post_id`";
 		}
+		$que .= ") AS `pos` GROUP BY `post` ORDER BY COUNT(*) DESC, `likes` DESC, `date`;";
 	}
-	$que .= "GROUP BY `posts`.`id` ORDER BY COUNT(`likes`.`post_id`) DESC, `date`;";
+	else 
+	$que = "SELECT DISTINCT `nick`, `picture`, `date`, `posts`.`id` AS 'post', `title`, `rot`, `author`, `category` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id` GROUP BY `posts`.`id` ORDER BY COUNT(`likes`.`post_id`) DESC, `date`;";
 	$que = $con->query($que);
 	if ($row = $que->fetchAll()) {
 		foreach ($row as $record) {
-			post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['nick'], $record['rot'], $con, $mainHref);
+			post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['picture'], $record['nick'], $record['rot'], $con, $mainHref);
 		}
 	} else {
 		echo "No post yet!";

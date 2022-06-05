@@ -31,6 +31,7 @@ body {
 }
 
 h3 a,
+a.main-post,
 a.post,
 a[title="category"],
 a[title="author"] {
@@ -105,7 +106,7 @@ form {
 	z-index: 99998;
 }
 
-.login {
+.login, .sorry {
 	z-index: 99999;
 	position: fixed;
 	top: 50%;
@@ -181,6 +182,10 @@ form {
 	background: var(--color2);
 }
 
+.form button.disabled {
+	background: var(--color0);
+}
+
 input[name="password"] {
 	width: calc(100% - 50px);
 }
@@ -203,7 +208,7 @@ input[name="password"] {
 }
 
 .icon a:focus,
-#icon a:hover {
+.icon a:hover {
 	background: #dbdbdb;
 }
 
@@ -220,6 +225,7 @@ input[name="password"] {
 }
 
 .like>button,
+.main-post button,
 .post button {
 	color: var(--color4);
 	background: none;
@@ -242,11 +248,11 @@ input[name="password"] {
 	align-items: center;
 }
 
-.post:not(h2) {
+.post:not(h2), .main-post:not(h2) {
 	font-size: 1.25em;
 	font-weight: bold;
 }
-.post h2 {
+.post h2, .main-post h2 {
 	margin: 0;
 }
 
@@ -254,7 +260,20 @@ input[name="password"] {
 	opacity: 0;
 	color: var(--color4);
 }
-
+.post .header, .main-post .header{
+	display: flex;
+	gap: 0.5ch;
+	align-items: center;
+}
+.post .header a[title="author"], .main-post .header a[title="author"]{
+	display: flex;
+	align-items: center;
+}
+.post .header img, .main-post .header img {
+	background-color: black;
+	height: 1.5em;
+	border-radius: 100%;
+}
 .post:hover .trash {
 	opacity: 1;
 }
@@ -354,7 +373,7 @@ input[name="password"] {
 	width: 50%;
 }
 
-#err {
+.err {
 	color: red;
 }
 
@@ -369,7 +388,6 @@ input[name="password"] {
 	height: 200px;
 	border-radius: 100%;
 }
-
 #profile .info {
 	display: flex;
 	flex-direction: column;
@@ -412,4 +430,21 @@ input[name="password"] {
 	flex-direction: column;
 	flex-wrap: nowrap;
 	gap: .5em;
+}
+.login-label{
+	display: flex; 
+	gap: 2.5ch; 
+	justify-content: center;
+}
+.login-label a {
+	width: 10ch;
+}
+.sorry {
+	font-size: 1.5em;
+	width: 50ch;
+	position: fixed;
+	background: #FFFFFF;
+	border-radius: 10px;
+	margin: 0 auto;
+	padding: 15px 45px;
 }

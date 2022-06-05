@@ -45,7 +45,7 @@ if (!empty($_POST['confirm'])) {
 ?>
 
 <?php if (!empty($getpost) && empty($getcategory)) {
-	$que = "SELECT `nick`, `date`, `category`, `title`, `posts`.`id` AS 'post', `author`, `rot` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`id` = $getpost";
+	$que = "SELECT `nick`, `picture`, `date`, `category`, `title`, `posts`.`id` AS 'post', `author`, `rot` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`id` = $getpost";
 	
 	$rec = $con->query($que)->fetch();
 	if (!$rec) {
@@ -62,7 +62,7 @@ if (!empty($_POST['confirm'])) {
 			}
 		</style>
 			<?php
-				post('comments', $rec['post'], $rec['title'], $rec['category'], $rec['date'], $rec['author'], $rec['nick'], $rec['rot'], $con, $mainHref);
+				post('comments', $rec['post'], $rec['title'], $rec['category'], $rec['date'], $rec['author'], $rec['picture'], $rec['nick'], $rec['rot'], $con, $mainHref);
 
 			?>
 		<?php if (isset($_SESSION['logged'])) : ?>
@@ -88,51 +88,14 @@ if (!empty($_POST['confirm'])) {
 ?>
 
 <?php if (!empty($getcategory) && empty($getpost)) : ?>
-	<style>
-
-
-
-	</style>
 	<h3>Posts form category: <a href="<?= $mainHref ?>/category/<?= str_replace(' ', '+', $getcategory) ?>"><?= $getcategory ?></a></h3>
 	<div class="comments">
 		<?php
-		$query = "SELECT `nick`, `date`, `posts`.`id`, `title`, `rot`, `users`.`id` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`category` = '" . $getcategory . "';";
+		$query = "SELECT `nick`, `picture`, `date`, `posts`.`id` AS 'post', `category`, `title`, `rot`, `author` FROM `posts` JOIN `users` ON `author` = `users`.`id` WHERE `posts`.`category` = '" . $getcategory . "';";
 		$query = $con->query($query);
 		if ($row = $query->fetchAll()) {
 			foreach ($row as $record) {
-				echo "<div class='post'>
-            <div style='font-size: 0.75em;'><a title='author' href=" . $mainHref . "/profile/" . str_replace(' ', '+', $record[0]) . ">" . ((strlen($record[0]) > 20) ? (substr($record[0], 0, 17) . "...") : $record[0]) . "</a> - <span title='publication date | $record[1]'>".publication($record[1])."</span></div>
-            <div class='post-title'>
-							<div class='post-content'>
-								<a title='go to this post' href='$mainHref/post/" . base_convert($record[2], 10, 36) . "' class='post'>$record[3]</a>
-								<form method='post'>
-							";
-				if (isset($_SESSION['logged'])) {
-					if ($record[5] == $_SESSION['logged']) {
-						echo "<button type='submit' name='delete' value='$record[2]'>
-										<span title='delete post' class='trash material-icons-outlined'>
-											delete_forever
-										</span>
-									</button>";
-					}
-				}
-				echo "</form>
-							</div>
-							<form method='post' class='like' title='likes'>";
-				echo (($con->query("SELECT COUNT(*) FROM `likes` WHERE `post_id` = '" . $record[2] . "';"))->fetch()[0]);
-				if (!isset($_SESSION['logged'])) : ?>
-					<button type='submit' name="login">
-						<span class='material-icons-outlined'>favorite</span>
-					</button>
-				<?php endif;
-				if (isset($_SESSION['logged'])) : ?>
-					<button name='like' value='<?= $record[2] ?>' type='submit' <?= ((($con->query("SELECT * FROM `likes` WHERE `user_id` = '" . $_SESSION['logged'] . "' AND `post_id` = '" . $record[2] . "';"))->fetch()) ? "class='liked'" : "") ?>>
-						<span class='material-icons-outlined'>favorite</span>
-					</button>
-		<?php endif;
-				echo "</form>
-						</div>
-          </div>";
+				post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['picture'], $record['nick'], $record['rot'], $con, $mainHref);
 			}
 		} else {
 			echo "No post yet!";
