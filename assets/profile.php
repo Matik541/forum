@@ -41,14 +41,25 @@ if (!empty($_POST['confirm'])) {
 $que = $con->query("SELECT * FROM `users` WHERE `nick` LIKE '$request[1]'");
 $fetch = $que->fetch();
 if ($fetch) : ?>
-	<div id="profile">
-		<img src="<?= ($fetch[4]) ? $fetch[4] : $mainHref . "/../images/profile-placeholder.png" ?>" alt="<?= $fetch[3] ?>'s profile picture">
-		<div class="info">
-			<h3><?= $fetch[3] ?></h3>
-			<?= $fetch[1] ?>
-		</div>
-		<div class="action">
-			<form class="form" style="padding:0;" method="post">
+	<form class="form" style="padding:0;" method="post">
+		<div id="profile">
+			<img id="img" src="<?= ($fetch[4]) ? $fetch[4] : $mainHref . "/../images/profile-placeholder.png" ?>" alt="<?= $fetch[3] ?>'s profile picture">
+			<div class="info">
+				<?php if (isset($_POST['edit'])) { ?>
+					<input type="text" name="nick" value="<?= $fetch['nick'] ?>">
+					<input type="email" name="email" value="<?= $fetch['email'] ?>">
+					<input type="url" name="picture" id="picture" value="<?= $fetch['picture'] ?>">
+					<script>
+						document.getElementById("picture").addEventListener('change', function(){
+							document.getElementById('img').src = this.value;
+						});
+					</script>
+				<?php } else { ?>
+					<h3><?= $fetch[3] ?></h3>
+					<?= $fetch[1] ?>
+				<?php } ?>
+			</div>
+			<div class="action">
 				<?php
 				if (isset($_POST['accept']) && isset($_SESSION['logged'])) {
 					$user = $_SESSION['logged'];
@@ -61,6 +72,18 @@ if ($fetch) : ?>
 					$friend = $_POST['add'];
 					if (!$con->query("SELECT * FROM `friends` WHERE `user_id_1` = $user AND `user_id_2` = $friend")->fetch())
 						$con->query("INSERT INTO `friends` (`user_id_1`, `user_id_2`) VALUES ('$user', '$friend');");
+				}
+				if (isset($_POST['save'])) {
+					$que = "UPDATE `users` SET ";
+					if(!empty($_POST['picture']))
+						$que .= "`picture` = '" . $_POST['picture'].(!empty($_POST['nick'])?"', ":"");
+					if(!empty($_POST['nick']))
+						$que .= "`nick` = '" . $_POST['nick'].(!empty($_POST['email'])?"', ":"");
+					if(!empty($_POST['email']))
+						$que .= "`email` = '" . $_POST['email'];
+					$que .= "' WHERE `users`.`id` = $fetch[0];";
+					$con->query($que);
+					header("Location:$mainHref/profile/" . $_POST['nick']);
 				}
 
 				if (isset($_SESSION['logged']))
@@ -78,11 +101,15 @@ if ($fetch) : ?>
 							echo "<button disabled>Request sent</button>";
 						else
 							echo "<button type='submit' name='add' value='$fetch[0]'>Add friend</button>";
+					} else if (!isset($_POST['edit'])) {
+						echo "<button type='submit' name='edit' value='$fetch[0]'>Edit profile</button>";
+					} else {
+						echo "<button type='submit' name='save' value='$fetch[0]'>Save changes</button>";
 					}
 				?>
-			</form>
+			</div>
 		</div>
-	</div>
+	</form>
 
 	<span class="hr-label">Friends</span>
 	<hr>
@@ -91,11 +118,11 @@ if ($fetch) : ?>
 		$que = $con->query("SELECT `id`, `nick`, `picture` FROM `users` WHERE `id` IN (SELECT `user_id_2` AS 'friends' FROM `friends` WHERE `user_id_1` = $fetch[0] INTERSECT SELECT `user_id_1` AS 'friends' FROM `friends` WHERE `user_id_2` = $fetch[0]);");
 		while ($rec = $que->fetch()) {
 			echo "<div class='card'>
-								<a href=" . $mainHref . "/profile/" . str_replace(' ', '+', $rec[1]) . ">
-									<img width='50' height='50' src='" . (($rec[2]) ? $rec[2] : $mainHref . "/../images/profile-placeholder.png") . "' alt=\"$rec[1]'s profile picture\">" .
-				((strlen($rec[1]) > 20) ? (substr($rec[1], 0, 17) . "...") : $rec[1])
-				. "</a>
-							</div>";
+							<a href=" . $mainHref . "/profile/" . str_replace(' ', '+', $rec[1]) . ">
+								<img width='50' height='50' src='" . (($rec[2]) ? $rec[2] : $mainHref . "/../images/profile-placeholder.png") . "' alt=\"$rec[1]'s profile picture\">" .
+				((strlen($rec[1]) > 20) ? (substr($rec[1], 0, 17) . "...") : $rec[1]) . "
+							</a>
+						</div>";
 		}
 		?>
 
@@ -113,7 +140,7 @@ if ($fetch) : ?>
 	<span class="hr-label">Liked posts</span>
 	<hr>
 	<div class="posts" style="font-size: 0.75em;">
-	<?php
+		<?php
 		$que = $con->query("SELECT `nick`, `picture`, `date`, `category`, `title`, `posts`.`id` AS 'post', `author`, `rot` FROM `posts` LEFT JOIN `users` ON `author` = `users`.`id` LEFT JOIN `likes` ON `posts`.`id` = `post_id` WHERE `likes`.`user_id` = $fetch[0] GROUP BY `posts`.`id` LIMIT 3;");
 		while ($record = $que->fetch()) {
 			post('single', $record['post'], $record['title'], $record['category'], $record['date'], $record['author'], $record['picture'], $record['nick'], $record['rot'], $con, $mainHref);

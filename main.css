@@ -389,6 +389,7 @@ input[name="password"] {
 	border-radius: 100%;
 }
 #profile .info {
+	text-align: left;
 	display: flex;
 	flex-direction: column;
 	width: 200px;

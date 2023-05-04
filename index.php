@@ -25,7 +25,7 @@ function publication($date)
 }
 function post($type, $id, $title, $category, $date, $author, $author_img, $nick, $root, $con, $mainHref)
 {
-  echo "<div class='".(($type == 'single')?"post":"main-post")."'>";
+  echo "<div class='" . (($type == 'single') ? "post" : "main-post") . "'>";
   if ($type == 'comments') : ?>
     <div class="header" style='margin: 1em 0 0.5em;'>
       <a title='author' href="<?= "$mainHref/profile/" . (str_replace(' ', '+', $nick)) ?>"><img src="<?= ($author_img) ? $author_img : $mainHref . "/../images/profile-placeholder.png" ?>" alt="<?= $nick ?>'s profile picture"><?= ((strlen($nick) > 20) ? (substr($nick, 0, 17) . "...") : $nick) ?></a> -
@@ -37,7 +37,7 @@ function post($type, $id, $title, $category, $date, $author, $author_img, $nick,
         <form method='post'>
           <?php if (isset($_SESSION['logged']))
             if ($author == $_SESSION['logged']) : ?>
-            <button type='submit' name='delete' value='$id'>
+            <button type='submit' name='delete' value='<?= $id ?>'>
               <span title='delete post' class='trash material-icons-outlined'>
                 delete_forever
               </span>
@@ -93,7 +93,7 @@ function post($type, $id, $title, $category, $date, $author, $author_img, $nick,
         <form method='post'>
           <?php if (isset($_SESSION['logged']))
             if ($author == $_SESSION['logged']) : ?>
-            <button type='submit' name='delete' value='$id'>
+            <button type='submit' name='delete' value='<?= $id ?>'>
               <span title='delete post' class='trash material-icons-outlined'>
                 delete_forever
               </span>

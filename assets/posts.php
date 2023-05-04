@@ -72,10 +72,9 @@ if (!empty($_POST['confirm'])) {
 				<button type="submit">Add comment</button>
 				<?php
 				if (!empty($_POST["title"])) {
-					$id = 1 + ($con->query("SELECT `id` FROM `posts` ORDER BY `id` DESC LIMIT 1;"))->fetch()[0];
 					$title = $_POST["title"];
 					$author = $_SESSION['logged'];
-					$con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES ('$id', '$title', '$author', '$rec[2]', current_timestamp(), $getpost);");
+					$con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES (NULL, '$title', '$author', '$rec[2]', current_timestamp(), $getpost);");
 					$_POST = array();
 					header("Refresh:0");
 				}
@@ -109,10 +108,9 @@ if (!empty($_POST['confirm'])) {
 			<button type="submit">Add post</button>
 			<?php
 			if (!empty($_POST["title"])) {
-				$id = 1 + ($con->query("SELECT `id` FROM `posts` ORDER BY `id` DESC LIMIT 1;"))->fetch()[0];
 				$title = $_POST["title"];
 				$author = $_SESSION['logged'];
-				$con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES ('$id', '$title', '$author', '" . $getcategory . "', current_timestamp(), NULL);");
+				$con->query("INSERT INTO `posts` (`id`, `title`, `author`, `category`, `date`, `rot`) VALUES (NULL, '$title', '$author', '" . $getcategory . "', current_timestamp(), NULL);");
 				$_POST = array();
 				header("Refresh:0");
 			}
